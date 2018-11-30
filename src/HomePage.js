@@ -2,17 +2,50 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Link} from 'react-router-dom';
 
-class HomePage extends Component {
+class Message extends Component {
     render() {
         return (
-            <div>
-                <h1>Home Page</h1>
-                <p>
-                    Here is my main page content <Link to="/page1/mail">Mail</Link>
-                </p>
-                <p>
-                    <a href="https://reacttraining.com/react-router/web/guides/quick-start">Click me to find out more about routing</a>
-                </p>
+            <div className="message">
+                {this.props.content}
+            </div>
+        );
+    }
+}
+
+class HomePage extends Component {
+    constructor(props) {
+        super(props);
+        this.sendSomeData = this.sendSomeData.bind(this);
+        this.updateMessage = this.updateMessage.bind(this);
+        this.state = {
+            content: null, //Initial Content
+            messageValue: '',
+        }
+    };
+
+    updateMessage(e) {
+        this.setState({
+            messageValue: e.target.value,
+        });
+    }
+
+    sendSomeData(e) {
+        this.setState({
+            messageValue: e.target.value,
+        });
+    }
+
+    render() {
+        return (
+            <div className="content-area">
+            {this.state.content}
+                <div className = "messages">
+                    {
+                        JSON.stringify(this.props.messages)
+                    }
+                </div>
+                <input value={this.state.messageValue} onChange={this.updateMessage}/>
+                <button onClick={this.sendSomeData}>Send some post data</button>
             </div>
         );
     }
@@ -20,6 +53,7 @@ class HomePage extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        messages : state.testReducer.messages,
     };
 };
 
